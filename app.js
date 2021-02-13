@@ -3,25 +3,30 @@ var lyricArea = document.getElementById('lyricArea');
 var suggContainer = document.getElementById('suggContainer');
 
 const GetSearched = async(searchText)=>{
+    toggleSpinner();
     const url = `https://api.lyrics.ovh/suggest/${searchText}`
     const res = await fetch(url);
     const data = await res.json();
     display(data.data) 
+    toggleSpinner();
+    
 }
 
 const GetLyrics = async(artist, title)=>{
+    
+    LyricsSpinner();
     const url = `https://api.lyrics.ovh/v1/${artist}/${title}`
     const res = await fetch(url);
     const data = await res.json();
     
         if (data.lyrics != '') {
             lyricArea.innerText = data.lyrics;
-        console.log(data.lyrics)
+            LyricsSpinner();
         }
     else {
-        lyricArea.innerText = 'Sorry, Lyrics Not Found! Try With Another Song!'
+        lyricArea.innerText = 'Sorry, Lyrics Not Found! Try With Another Song!';
+        LyricsSpinner();
     }
-    
 }
 
 const showSuggesion = () => {
@@ -59,6 +64,17 @@ newDiv.className = "single-result row align-items-center my-3 p-3"
     });
 
 } 
-
+const toggleSpinner = () => {
+    const spinner = document.getElementById('spinner');
+    const suggContainer = document.getElementById('suggContainer');
+    spinner.classList.toggle('d-none')
+    suggContainer.classList.toggle('d-none');
+}
+const LyricsSpinner = () => {
+    const spinner = document.getElementById('spinner');
+    const lyricArea = document.getElementById('lyricArea');
+    spinner.classList.toggle('d-none');
+    lyricArea.classList.toggle('d-none');
+}
 
 
